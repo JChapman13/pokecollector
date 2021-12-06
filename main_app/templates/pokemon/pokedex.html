@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1>Pokédex</h1>
+
+{% for poke in pokemon %}
+<div class="card">
+  <div class="card-content">
+    <span class="card-title">{{ poke.name }}</span>
+    <p>Type: {{ poke.poketype }}</p>
+    <p>Species: {{ poke.species }}</p>
+    <p>Ability: {{ poke.ability }}</p>
+  </div>
+</div>
+{% endfor %} {% endblock %}
