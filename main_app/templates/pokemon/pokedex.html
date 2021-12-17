@@ -4,11 +4,13 @@
 
 {% for poke in pokemon %}
 <div class="card">
-  <div class="card-content">
-    <span class="card-title">{{ poke.name }}</span>
-    <p>Type: {{ poke.poketype }}</p>
-    <p>Species: {{ poke.species }}</p>
-    <p>Ability: {{ poke.ability }}</p>
-  </div>
+  <a href="{% url 'detail' poke.id %}">
+    <div class="card-content">
+      <span class="card-title">{{ poke.name }}</span>
+      <p>Pokétype: {{ poke.poketype }}</p>
+      <p>Species: {{ poke.species }}</p>
+      <p>Ability: {{ poke.ability }}</p>
+    </div>
+  </a>
 </div>
 {% endfor %} {% endblock %}

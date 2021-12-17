@@ -1,0 +1,104 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1>Pokemon Details</h1>
+
+<div class="row">
+  <div class="col s6">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">{{ pokemon.name }}</span>
+        <p>Poketype: {{ pokemon.poketype }}</p>
+        <p>Species: {{ pokemon.species }}</p>
+        <p>Ability: {{ pokemon.ability }}</p>
+      </div>
+      <div class="card-action">
+        <a href="{% url 'pokemon_update' pokemon.id %}">Edit</a>
+        <a href="{% url 'pokemon_delete' pokemon.id %}">Delete</a>
+      </div>
+    </div>
+  </div>
+  <div class="col s6">
+    <form method="post">
+      <form action="{% url 'add_healing' pokemon.id %}" method="post">
+        {% csrf_token %} {{ healing_form.as_p }}
+        <input type="submit" class="btn" value="Add Healing" />
+      </form>
+    </form>
+    <table class="striped">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Restoration Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for healing in pokemon.healing_set.all %}
+        <tr>
+          <td>{{healing.date}}</td>
+          <td>{{healing.get_heal_stats_display}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <hr />
+  <div class="row">
+    <div class="col s6">
+      <h3>{{ pokemon.name }}'s Armor</h3>
+      {% if pokemon.armor.count %} {% for arm in pokemon.armor.all %}
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">
+            A
+            <span style="main_stats: {{ arm.main_stats }}"
+              >{{ arm.main_stats }}</span
+            >
+            {{ arm.name }}
+          </span>
+        </div>
+      </div>
+      {% endfor %} {% else %}
+      <h5>No Armor :(</h5>
+      {% endif %}
+    </div>
+    <div class="col s6">
+      <h3>Available Armor</h3>
+      {% if armor.count %} {% for armor in armor.all %}
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">
+            A
+            <span style="main_stats: {{ arm.main_stats }}"
+              >{{ arm.main_stats }}</span
+            >
+            {{ arm.name }}
+          </span>
+        </div>
+        <div class="card-action">
+          <form
+            action="{%url 'assoc_armor' pokemon.id armor.id %}"
+            method="post"
+          >
+            {% csrf_token %}
+            <button type="submit" class="btn">Add</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %} {% else %}
+      <h5>{{pokemon.name}} Already Has All Armor Available</h5>
+      {% endif %}
+    </div>
+    <script>
+      var dateEl = document.getElementById("id_date");
+      M.Datepicker.init(dateEl, {
+        format: "yyyy-mm-dd",
+        defaultDate: new Date(),
+        setDefaultDate: true,
+        autoClose: true,
+      });
+      var selectEl = document.getElementById("id_heal");
+      M.FormSelect.init(selectEl);
+    </script>
+    {% endblock %}
+  </div>
+</div>
